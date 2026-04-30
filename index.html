@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Happy Birthday Di!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Inter:wght@400;600;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <!-- Background Music Element -->
+  <audio id="bg-music" loop>
+    <source src="./gilehriyaan.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Ambient Dust Container -->
+  <div id="ambient-dust"></div>
+
+  <!-- Cursor Trail Container -->
+  <div id="cursor-trail"></div>
+
+  <!-- Curtains Layer (Z-index high, hidden initially) -->
+  <div id="curtains" class="curtain-container hidden">
+    <div id="curtain-left" class="curtain curtain-left"></div>
+    <div id="curtain-right" class="curtain curtain-right"></div>
+  </div>
+
+  <!-- Main Background -->
+  <div id="main-bg" class="background-state dark-mode"></div>
+
+  <!-- Background Text (Behind the Modal) -->
+  <div id="bg-text-layer" class="bg-text-layer flex-center">
+    <h1 class="bg-title">Happy Birthday, <span class="custom-name">Di</span></h1>
+    <p class="bg-subtitle">A CINEMATIC JOURNEY CREATED JUST FOR YOU</p>
+  </div>
+
+  <!-- Interactive Story Prompt Layer (Modal System) -->
+  <div class="story-layer flex-center">
+    <!-- Balloons Container -->
+    <div id="balloons-container" class="balloons-container hidden"></div>
+
+    <div id="glass-modal" class="glass-modal parallax-element">
+      <div class="prompt-box">
+        <h2 id="main-text" class="main-text fade-in">Happy Birthday di</h2>
+        <div class="dot-indicators hidden" id="dots">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        </div>
+        <button id="action-btn" class="action-btn glowing-btn hidden">Open your gift</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- The Letter Content (Revealed after Curtains Open) -->
+  <div id="letter-layer" class="letter-layer hidden flex-center">
+    <!-- Wrapped in 3D perspective container -->
+    <div class="perspective-container">
+      <div id="elegant-letter" class="elegant-letter fade-in-up parallax-element">
+        <h2 class="letter-title">Dearest Di,</h2>
+        <p class="letter-body">In english they say <em>'you are my fvrt teacher'</em>,</p>
+        <br>
+        <p class="letter-body">But in poetry we say:-</p>
+        <!-- The poetry box text will be injected by typewriter logic -->
+        <div class="poetry-box" id="poetry-text-container"></div>
+        <div class="button-container fade-out" id="memories-btn-container">
+          <button id="memories-btn" class="action-btn glowing-btn mt-2 hidden">Moments in Time</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Memories Gallery Layer -->
+  <div id="gallery-layer" class="gallery-layer hidden">
+    <h2 class="gallery-title">Moments in Time</h2>
+    <div class="gallery-grid" id="polaroid-grid">
+      <div class="polaroid-item">
+        <div class="pic" style="background-image:url('./photo1.jpeg');"></div>
+        <div class="polaroid-caption">Inspiring me every day.</div>
+      </div>
+      <div class="polaroid-item">
+        <div class="pic" style="background-image:url('./photo2.jpeg');"></div>
+        <div class="polaroid-caption">The best mentor.</div>
+      </div>
+      <div class="polaroid-item">
+        <div class="pic" style="background-image:url('./photo3.jpg');"></div>
+        <div class="polaroid-caption">Always pushing me forward.</div>
+      </div>
+      <div class="polaroid-item">
+        <div class="pic" style="background-image:url('./photo4.jpg');"></div>
+        <div class="polaroid-caption">A pure heart of gold.</div>
+      </div>
+      <div class="polaroid-item">
+        <div class="pic" style="background-image:url('./photo5.jpg');"></div>
+        <div class="polaroid-caption">More than just a teacher.</div>
+      </div>
+      <div class="polaroid-item">
+        <div class="pic" style="background-image:url('./photo6.jpg');"></div>
+        <div class="polaroid-caption">A friend for life.</div>
+      </div>
+      <!-- Add new photos below this line -->
+      <div class="polaroid-item">
+        <div class="pic" style="background-image:url('./photo7.jpeg');"></div>
+        <div class="polaroid-caption">Beautiful memory.</div>
+      </div>
+      <div class="polaroid-item">
+        <div class="pic" style="background-image:url('./photo8.jpg');"></div>
+        <div class="polaroid-caption">Cherished moments.</div>
+      </div>
+      <div class="polaroid-item">
+        <div class="pic" style="background-image:url('./photo9.jpg');"></div>
+        <div class="polaroid-caption">Unforgettable times.</div>
+      </div>
+    </div>
+
+
+    <!-- Transition to Final Layer Button -->
+    <div class="final-btn-container" style="text-align: center; margin-top: 50px; padding-bottom: 50px;">
+      <button id="final-btn" class="action-btn glowing-btn">One last thing...</button>
+    </div>
+  </div>
+
+  <!-- Final Stage Layer -->
+  <div id="final-layer" class="final-layer hidden flex-center" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 140; background-color: #000; overflow: hidden;">
+    <!-- Background Picture for Final Scene -->
+    <div id="final-bg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('./photo10.png'); background-size: cover; background-position: center; opacity: 0.4; z-index: 1; transition: background-image 1.5s ease-in-out;"></div>
+    
+    <!-- Final Message Section -->
+    <div class="final-message-container" style="z-index: 2; text-align: center; color: white;">
+      <p id="final-universe" style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 2rem; margin-bottom: 30px; opacity: 0; transform: translateY(20px); transition: all 1s ease 0.5s;">Thank you Universe for this gift</p>
+      <h3 id="final-title" style="font-family: 'Dancing Script', cursive; font-size: 4rem; color: var(--theme-red); margin-bottom: 20px; text-shadow: 0 0 15px rgba(255, 0, 0, 0.4); opacity: 0; transform: translateY(20px); transition: all 1s ease 2s;">Forever yours only..</h3>
+      <p id="final-signature" style="font-family: 'Inter', sans-serif; font-size: 1.5rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; opacity: 0; transform: translateY(20px); transition: all 1s ease 3.5s;">- A token of love from Suparna -</p>
+    </div>
+  </div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+
+</html>

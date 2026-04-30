@@ -1,0 +1,485 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Inter:wght@400;600;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
+
+:root {
+  --bg-color: #000000;
+  --theme-red: #ff0000; 
+  --theme-red-glow: #ff0000; 
+  --theme-red-dark: #660000;
+  --gold-accent: #d4af37;
+  --text-primary: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.6);
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 0, 0, 0.2);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  overflow: hidden; 
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  /* Fix 3d perspective for entire body so parallax works smoothly */
+  perspective: 1000px;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Ambient Dust Particles */
+#ambient-dust {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.dust {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  opacity: 0;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px var(--theme-red-glow);
+  animation: floatDust 15s infinite ease-in-out;
+}
+
+@keyframes floatDust {
+  0% { transform: translateY(0px) scale(0.5); opacity: 0; }
+  25% { opacity: 0.8; }
+  50% { transform: translateY(-50px) translateX(20px) scale(1); opacity: 0.5; }
+  75% { opacity: 0.8; }
+  100% { transform: translateY(-100px) translateX(-20px) scale(0.5); opacity: 0; }
+}
+
+/* Magical Cursor Hearts Trail */
+#cursor-trail {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.cursor-heart {
+  position: absolute;
+  width: 12px; height: 12px;
+  background-color: var(--theme-red);
+  transform: rotate(-45deg);
+  opacity: 1;
+  pointer-events: none;
+  animation: heartFade 0.8s ease-out forwards;
+}
+.cursor-heart::before,
+.cursor-heart::after {
+  content: '';
+  position: absolute;
+  width: 12px; height: 12px;
+  background-color: var(--theme-red);
+  border-radius: 50%;
+}
+.cursor-heart::before {
+  top: -6px; left: 0;
+}
+.cursor-heart::after {
+  top: 0; left: 6px;
+}
+
+@keyframes heartFade {
+  0% { opacity: 1; transform: rotate(-45deg) scale(1) translateY(0); }
+  100% { opacity: 0; transform: rotate(-45deg) scale(0.2) translateY(-20px); }
+}
+
+/* Background States */
+.background-state {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 1;
+  transition: background 2s ease-in-out;
+}
+.dark-mode { background: var(--bg-color); }
+.lit-mode { background: radial-gradient(circle at center, #330000 0%, var(--bg-color) 80%); }
+
+/* Background Cinematic Text Layer */
+.bg-text-layer {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 5;
+  pointer-events: none;
+  text-align: center;
+  opacity: 1; 
+  transition: opacity 2s ease-in-out;
+}
+.bg-text-layer.dimmed { opacity: 0.15; }
+
+.bg-title {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 4rem;
+  color: #ff0000; 
+  text-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+  margin-bottom: 5px;
+  letter-spacing: 2px;
+}
+.custom-name {
+  font-family: 'Dancing Script', cursive;
+  font-size: 5.5rem;
+  padding-left: 10px;
+}
+.bg-subtitle {
+  font-size: 0.85rem;
+  letter-spacing: 5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* Story Prompt Layer */
+.story-layer {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 10;
+  perspective: 1000px;
+}
+
+/* 3D Parallax Shared Class */
+.parallax-element {
+  /* Set from JS dynamically */
+  transform: rotateX(var(--tiltY, 0deg)) rotateY(var(--tiltX, 0deg)) translateY(var(--baseY, 0));
+  transition: transform 0.1s ease-out, opacity 1.5s ease-in-out; /* Note: base translateY is used across animations */
+  transform-style: preserve-3d;
+}
+
+/* The Glassmorphic Modal */
+.glass-modal {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  padding: 40px 60px;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255,0,0,0.05); 
+  min-width: 380px;
+  min-height: 220px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0; 
+  pointer-events: none; 
+  --baseY: 20px; /* start pulled down */
+}
+
+.glass-modal.appear {
+  opacity: 1;
+  pointer-events: all;
+  --baseY: 0px; 
+}
+
+.prompt-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  transform: translateZ(30px); /* Pops the text out slightly off the glass plate in 3D */
+}
+
+.main-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  transition: opacity 0.4s ease;
+  text-align: center;
+}
+.main-text.lit-text {
+  color: #ffcccc;
+  text-shadow: 0 0 20px var(--theme-red-glow);
+}
+
+.dot-indicators { display: flex; gap: 5px; }
+.dot { width: 6px; height: 6px; background-color: var(--text-muted); border-radius: 50%; }
+
+/* Glowing Button Styling */
+.action-btn {
+  background: transparent;
+  color: var(--text-primary);
+  padding: 12px 30px;
+  font-size: 0.9rem;
+  letter-spacing: 1.5px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.glowing-btn {
+  background: rgba(255, 0, 0, 0.1);
+  border: 1px solid rgba(255, 0, 0, 0.5);
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.4), inset 0 0 10px rgba(255, 0, 0, 0.2);
+  color: #ff0000;
+}
+.glowing-btn:hover {
+  background: rgba(255, 0, 0, 0.3);
+  box-shadow: 0 0 25px rgba(255, 0, 0, 0.8), inset 0 0 15px rgba(255, 0, 0, 0.5);
+  color: #ffffff;
+  transform: translateZ(10px) scale(1.05); /* pops out in 3D during hover */
+}
+
+/* Curtains */
+.curtain-container {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 50; 
+  pointer-events: none;
+  display: flex;
+}
+.curtain {
+  width: 50%; height: 100%;
+  background-color: var(--theme-red-dark);
+  background-image: repeating-linear-gradient(to right, transparent, transparent 40px, rgba(0,0,0,0.3) 40px, rgba(0,0,0,0.3) 50px);
+  box-shadow: 0 0 30px rgba(0,0,0,0.8);
+  transition: transform 2s cubic-bezier(0.77, 0, 0.175, 1);
+}
+.curtain-left { transform-origin: left; }
+.curtain-right { transform-origin: right; }
+.curtain-open .curtain-left { transform: translateX(-100%); }
+.curtain-open .curtain-right { transform: translateX(100%); }
+
+/* Letter Layer */
+.letter-layer {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 40; 
+  padding: 20px;
+}
+.perspective-container {
+  perspective: 1000px;
+  width: 100%; height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.elegant-letter {
+  background: rgba(10, 0, 0, 0.85); 
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  max-width: 600px; width: 100%;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 0 40px rgba(255, 0, 0, 0.2);
+  text-align: center;
+  border: 1px solid var(--glass-border);
+  --baseY: 0px; 
+}
+.elegant-letter * {
+  transform: translateZ(20px);
+}
+
+.letter-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 3.5rem;
+  color: var(--theme-red);
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+}
+.letter-body {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+}
+.poetry-box {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-style: italic;
+  color: #ffcccc;
+  margin: 25px 0;
+  padding: 20px;
+  background: rgba(255, 0, 0, 0.05);
+  border-radius: 10px;
+  line-height: 1.8;
+  border-left: 2px solid var(--theme-red);
+  border-right: 2px solid var(--theme-red);
+  min-height: 120px; /* keeps box size stable while typing */
+}
+
+.signature {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2rem;
+  color: var(--text-muted);
+  text-align: right;
+  margin-top: 15px;
+  padding-right: 20px;
+}
+.signature span {
+  color: var(--theme-red);
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+}
+
+/* Polaroid Gallery Layer */
+.gallery-layer {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 110; 
+  background: var(--bg-color);
+  padding: 40px 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.gallery-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 3rem;
+  color: var(--theme-red);
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.gallery-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Physical Polaroid Scattering */
+.polaroid-item {
+  width: 250px;
+  background: #fff;
+  padding: 15px 15px 40px 15px; /* Bottom heavy for polaroid */
+  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+  opacity: 0; /* Hidden initially */
+  transform: translateY(100vh) rotate(0deg); /* Start off screen */
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+/* JS will add this class to throw them nicely onto the "table" */
+.polaroid-item.scattered {
+  opacity: 1;
+  /* rotation/transform will be set inline in JS for random scatter! */
+}
+.polaroid-item.scattered:hover {
+  transform: scale(1.1) rotate(0deg) translateZ(50px) !important;
+  z-index: 10;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+}
+
+.polaroid-item .pic {
+  width: 100%;
+  height: 220px;
+  background-size: cover; background-position: center;
+  border: 1px solid #ddd;
+}
+.polaroid-caption {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.5rem;
+  color: #333;
+  text-align: center;
+  margin-top: 15px;
+}
+
+/* Generic Animations */
+.fade-in { animation: fadeIn 0.8s ease-in-out forwards; }
+.fade-in-up { animation: fadeInUp 0.8s ease-in-out forwards; }
+.fade-out { opacity: 0 !important; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Balloons */
+.balloons-container {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none; overflow: hidden;
+  z-index: 10; 
+}
+.balloon {
+  position: absolute; bottom: -100px;
+  width: 60px; height: 80px;
+  border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+  animation: flyUp linear infinite;
+  box-shadow: inset -10px -10px 15px rgba(0,0,0,0.5);
+}
+.balloon::after {
+  content: ""; position: absolute;
+  bottom: -12px; left: 50%; transform: translateX(-50%);
+  border-left: 6px solid transparent; border-right: 6px solid transparent;
+  border-bottom: 12px solid var(--balloon-col, var(--theme-red));
+}
+.balloon::before {
+  content: ""; position: absolute;
+  bottom: -50px; left: 50%;
+  width: 2px; height: 40px;
+  background: rgba(255,255,255,0.3);
+}
+@keyframes flyUp {
+  0% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(-50vh) rotate(5deg); }
+  100% { transform: translateY(-110vh) rotate(-5deg); }
+}
+
+/* Ending Message Styles */
+.ending-message-container {
+  text-align: center;
+  margin-top: 80px;
+  padding-bottom: 80px;
+  opacity: 0;
+  animation: fadeIn 2s ease-in-out forwards;
+  animation-delay: 2s; /* delays appearance until polaroids have scattered */
+}
+
+.ending-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 3.5rem;
+  color: var(--theme-red);
+  margin-bottom: 15px;
+  text-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+}
+
+.ending-signature {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  margin-bottom: 30px;
+}
+
+.ending-universe {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1.5rem;
+  color: var(--text-muted);
+}
