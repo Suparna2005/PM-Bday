@@ -1,4 +1,13 @@
 import confetti from 'canvas-confetti';
+import photo10 from './photo10.png';
+import photo2 from './photo2.jpeg';
+import photo3 from './photo3.jpg';
+import photo4 from './photo4.jpg';
+import photo5 from './photo5.jpg';
+import photo6 from './photo6.jpg';
+import photo7 from './photo7.jpeg';
+import photo8 from './photo8.jpg';
+import photo9 from './photo9.jpg';
 
 document.addEventListener('DOMContentLoaded', () => {
   const mainText = document.getElementById('main-text');
@@ -282,10 +291,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const finalBg = document.getElementById('final-bg');
 
   const finalPhotos = [
-    './photo10.png',
-    './photo2.jpeg', './photo3.jpg', 
-    './photo4.jpg', './photo5.jpg', './photo6.jpg',
-    './photo7.jpeg', './photo8.jpg', './photo9.jpg'
+    photo10, photo2, photo3, 
+    photo4, photo5, photo6,
+    photo7, photo8, photo9
   ];
   let currentPhotoIndex = 0;
 
